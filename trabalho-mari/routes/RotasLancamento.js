@@ -1,17 +1,28 @@
 const express = require("express");
 const router = express.Router();
-const Lancamento = require("../models/Lancamento");
+const Lancamento = require("../models/lancamento");
 
-
+// GET todos os lançamentos de um produto
 router.get("/:produtoId", async (req, res) => {
-  const lancamentos = await Lancamento.find({ produto: req.params.produtoId }).sort({ data: 1 });
-  res.json(lancamentos);
+  try {
+    const lancamentos = await Lancamento.findAll({
+      where: { produtoId: req.params.produtoId },
+      order: [["data", "ASC"]]
+    });
+    res.json(lancamentos);
+  } catch (err) {
+    res.status(500).json({ erro: "Erro ao buscar lançamentos" });
+  }
 });
 
-
+// POST novo lançamento
 router.post("/", async (req, res) => {
-  const novo = await Lancamento.create(req.body);
-  res.json(novo);
+  try {
+    const novo = await Lancamento.create(req.body);
+    res.status(201).json(novo);
+  } catch (err) {
+    res.status(500).json({ erro: "Erro ao criar lançamento" });
+  }
 });
 
 module.exports = router;

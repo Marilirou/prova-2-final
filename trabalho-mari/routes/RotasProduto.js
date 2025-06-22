@@ -1,41 +1,56 @@
 const express = require("express");
 const router = express.Router();
-const controlador = require("../controllers/ControlarProduto");
-const Produto = require("../models/produto");
+const Produto = require("../models/Produto");
 
-router.post("/", controlador.criarProduto);
-
-module.exports = router;
-
-//listar produtos
+// GET todos os produtos
 router.get("/", async (req, res) => {
-  const produtos = await Produto.find();
-  res.json(produtos);
+  try {
+    const produtos = await Produto.findAll();
+    res.json(produtos);
+  } catch (err) {
+    res.status(500).json({ erro: "Erro ao listar produtos" });
+  }
 });
 
-//criar novo produto
-router.post("/", async (req, res) => {
-  const novo = new Produto(req.body);
-  await novo.save();
-  res.status(201).json(novo);
-});
-
-//excluir produto
-router.delete("/:id", async (req, res) => {
-  await Produto.findByIdAndDelete(req.params.id);
-  res.status(204).send();
-});
-
-//detalha produto
+// GET produto por ID
 router.get("/:id", async (req, res) => {
-    const produto = await Produto.findById(req.params.id);
+  try {
+    const produto = await Produto.findByPk(req.params.id);
     res.json(produto);
-  })
+  } catch (err) {
+    res.status(500).json({ erro: "Erro ao buscar produto" });
+  }
+});
 
-  //editar produto
-  router.put("/:id", async (req, res) => {
-    const produto = await Produto.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    res.json(produto);
-  });
+// POST novo produto
+router.post("/", async (req, res) => {
+  try {
+    const novo = await Produto.create(req.body);
+    res.status(201).json(novo);
+  } catch (err) {
+    res.status(500).json({ erro: "Erro ao criar produto" });
+  }
+});
+
+// DELETE produto
+router.delete("/:id", async (req, res) => {
+  try {
+    await Produto.destroy({ where: { id: req.params.id } });
+    res.sendStatus(204);
+  } catch (err) {
+    res.status(500).json({ erro: "Erro ao excluir produto" });
+  }
+});
+
+// PUT atualizar produto
+router.put("/:id", async (req, res) => {
+  try {
+    await Produto.update(req.body, { where: { id: req.params.id } });
+    const atualizado = await Produto.findByPk(req.params.id);
+    res.json(atualizado);
+  } catch (err) {
+    res.status(500).json({ erro: "Erro ao atualizar produto" });
+  }
+});
 
 module.exports = router;

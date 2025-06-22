@@ -1,11 +1,17 @@
-const mongoose = require("mongoose");
+const { DataTypes } = require("sequelize");
+const sequelize = require("../config/db");
+const Produto = require("./Produto");
 
-const LancamentoSchema = new mongoose.Schema({
-  produto: { type: mongoose.Schema.Types.ObjectId, ref: "Produto", required: true },
-  quantidade: { type: Number, required: true },
-  tipo: { type: String, enum: ["entrada", "saida", "balanco"], required: true },
-  data: { type: Date, default: Date.now },
-  observacao: { type: String }
+const Lancamento = sequelize.define("Lancamento", {
+  tipo: { type: DataTypes.ENUM("entrada", "saida", "balanco"), allowNull: false },
+  quantidade: { type: DataTypes.INTEGER, allowNull: false },
+  data: { type: DataTypes.DATE, allowNull: false },
+  observacao: DataTypes.TEXT
+}, {
+  timestamps: true,
 });
 
-module.exports = mongoose.model("Lancamento", LancamentoSchema);
+Produto.hasMany(Lancamento, { foreignKey: "produtoId" });
+Lancamento.belongsTo(Produto, { foreignKey: "produtoId" });
+
+module.exports = Lancamento;

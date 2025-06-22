@@ -1,21 +1,19 @@
 const express = require("express");
-const connectDB = require("./config/db");
-const produtoRoutes = require("./routes/RotasProduto");
-const lancamentoRoutes = require("./routes/RotasLancamento");
-const cors = require("cors");
-
-
 const app = express();
-const PORT = 3000;
+const sequelize = require("./config/db");
 
-connectDB();
-
-app.use(cors());
 app.use(express.json());
 
-app.use("/produtos", produtoRoutes);
-app.use("/lancamentos", lancamentoRoutes);
+// Suas rotas aqui
+app.use("/produtos", require("./routes/RotasProduto"));
+app.use("/lancamentos", require("./routes/RotasLancamento"));
 
-app.listen(PORT, () => {
-  console.log(`Servidor rodando em http://localhost:${PORT}`);
+// Sincroniza o Sequelize com MySQL
+sequelize.sync().then(() => {
+  console.log("✅ Banco sincronizado com Sequelize!");
+});
+
+// 🚨 Esta linha é essencial para o servidor rodar:
+app.listen(3000, () => {
+  console.log("🚀 Servidor rodando na porta 3000");
 });
