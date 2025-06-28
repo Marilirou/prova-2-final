@@ -2,61 +2,60 @@ const express = require("express");
 const router = express.Router();
 const Produto = require("../models/Produto");
 
-const autenticarToken = require("../middlewares/auth");
-
-router.get("/", autenticarToken, async (req, res) => {
-  const produtos = await Produto.findAll();
-  res.json(produtos);
-});
-
-// GET todos os produtos
-router.get("/", async (req, res) => {
+// Criar produto
+router.post("/", async (req, res) => {
   try {
-    const produtos = await Produto.findAll();
-    res.json(produtos);
+    const novo = await Produto.create(req.body);
+    res.status(201).json(novo);
   } catch (err) {
-    res.status(500).json({ erro: "Erro ao listar produtos" });
+    res.status(400).json({ erro: "Erro ao criar produto", detalhes: err });
   }
 });
 
-// GET produto por ID
+// Listar todos os produtos
+router.get("/", async (req, res) => {
+  try {
+    const lista = await Produto.findAll();
+    res.json(lista);
+  } catch (err) {
+    res.status(500).json({ erro: "Erro ao buscar produtos" });
+  }
+});
+
+// Buscar um produto específico
 router.get("/:id", async (req, res) => {
   try {
     const produto = await Produto.findByPk(req.params.id);
+    if (!produto) return res.status(404).json({ erro: "Produto não encontrado" });
     res.json(produto);
   } catch (err) {
     res.status(500).json({ erro: "Erro ao buscar produto" });
   }
 });
 
-// POST novo produto
-router.post("/", async (req, res) => {
-  try {
-    const novo = await Produto.create(req.body);
-    res.status(201).json(novo);
-  } catch (err) {
-    res.status(500).json({ erro: "Erro ao criar produto" });
-  }
-});
-
-// DELETE produto
-router.delete("/:id", async (req, res) => {
-  try {
-    await Produto.destroy({ where: { id: req.params.id } });
-    res.sendStatus(204);
-  } catch (err) {
-    res.status(500).json({ erro: "Erro ao excluir produto" });
-  }
-});
-
-// PUT atualizar produto
+// Atualizar produto
 router.put("/:id", async (req, res) => {
   try {
-    await Produto.update(req.body, { where: { id: req.params.id } });
-    const atualizado = await Produto.findByPk(req.params.id);
-    res.json(atualizado);
+    const produto = await Produto.findByPk(req.params.id);
+    if (!produto) return res.status(404).json({ erro: "Produto não encontrado" });
+
+    await produto.update(req.body);
+    res.json(produto);
   } catch (err) {
-    res.status(500).json({ erro: "Erro ao atualizar produto" });
+    res.status(400).json({ erro: "Erro ao atualizar produto" });
+  }
+});
+
+// Excluir produto
+router.delete("/:id", async (req, res) => {
+  try {
+    const produto = await Produto.findByPk(req.params.id);
+    if (!produto) return res.status(404).json({ erro: "Produto não encontrado" });
+
+    await produto.destroy();
+    res.json({ message: "Produto excluído com sucesso" });
+  } catch (err) {
+    res.status(500).json({ erro: "Erro ao excluir produto" });
   }
 });
 

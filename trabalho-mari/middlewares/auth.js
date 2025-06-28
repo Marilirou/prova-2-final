@@ -1,11 +1,10 @@
 const jwt = require("jsonwebtoken");
 
-const JWT_SECRET = "segredo-super-seguro"; // ideal colocar em .env depois
+const JWT_SECRET = "segredo-super-seguro"; 
 
 function autenticarToken(req, res, next) {
   const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1]; // "Bearer TOKEN"
-
+  const token = authHeader && authHeader.split(" ")[1];
   if (!token) return res.sendStatus(401);
 
   jwt.verify(token, JWT_SECRET, (err, user) => {

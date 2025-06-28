@@ -26,7 +26,7 @@ export default function Produtos() {
     const novosSaldos = {};
     for (const p of produtos) {
       try {
-        const res = await axios.get(`http://localhost:3000/lancamentos/${p._id}`);
+        const res = await axios.get(`http://localhost:3000/lancamentos/${p.id}`);
         const lancs = res.data;
 
         let saldo = 0;
@@ -36,10 +36,10 @@ export default function Produtos() {
           else if (l.tipo === "balanco") saldo = l.quantidade;
         });
 
-        novosSaldos[p._id] = saldo;
+        novosSaldos[p.id] = saldo;
       } catch (err) {
-        console.error("Erro ao buscar lançamentos do produto", p._id, err);
-        novosSaldos[p._id] = 0;
+        console.error("Erro ao buscar lançamentos do produto", p.id, err);
+        novosSaldos[p.id] = 0;
       }
     }
 
@@ -92,13 +92,13 @@ export default function Produtos() {
         </thead>
         <tbody>
           {produtosFiltrados.map((p) => (
-            <tr key={p._id}>
+            <tr key={p.id}>
               <td>
                 {p.imagem ? (
                   <img
                     src={p.imagem}
                     alt="Produto"
-                    style={{ width: "80px", borderRadius: "8px" }}
+                    style={{ width: "150px", borderRadius: "8px" }}
                   />
                 ) : (
                   "-"
@@ -107,11 +107,11 @@ export default function Produtos() {
               <td>{p.descricao}</td>
               <td>{p.sku}</td>
               <td>R$ {parseFloat(p.preco).toFixed(2)}</td>
-              <td>{saldos[p._id] ?? "..."}</td>
+              <td>{saldos[p.id] ?? "..."}</td>
               <td>
-                <button title="Editar" onClick={() => navigate(`/editar-produto/${p._id}`)} style={{ fontSize: "30px" }}>✏️</button>
-                <button title="Excluir" onClick={() => handleExcluir(p._id)} style={{ fontSize: "30px" }}>🗑️</button>
-                <button title="Detalhes" onClick={() => navigate(`/produto/${p._id}`)} style={{ fontSize: "30px" }}>🔍</button>
+                <button title="Editar" onClick={() => navigate(`/editar-produto/${p.id}`)} style={{ fontSize: "30px" }}>✏️</button>
+                <button title="Excluir" onClick={() => handleExcluir(p.id)} style={{ fontSize: "30px" }}>🗑️</button>
+                <button title="Detalhes" onClick={() => navigate(`/produto/${p.id}`)} style={{ fontSize: "30px" }}>🔍</button>
               </td>
             </tr>
           ))}

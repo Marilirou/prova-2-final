@@ -24,22 +24,29 @@ export default function Estoque() {
 
   const buscarSaldos = async (produtos) => {
     const novosSaldos = {};
+
     for (const p of produtos) {
       try {
-        const res = await axios.get(`http://localhost:3000/lancamentos/${p._id}`);
+        const res = await axios.get(`http://localhost:3000/lancamentos/${p.id}`);
         const lancs = res.data;
 
         let saldo = 0;
-        lancs.forEach((l) => {
-          if (l.tipo === "entrada") saldo += l.quantidade;
-          else if (l.tipo === "saida") saldo -= l.quantidade;
-          else if (l.tipo === "balanco") saldo = l.quantidade;
-        });
+        let encontrouBalanco = false;
 
-        novosSaldos[p._id] = saldo;
+        for (const l of lancs) {
+          if (l.tipo === "balanco") {
+            saldo = l.quantidade;
+            encontrouBalanco = true;
+          } else if (!encontrouBalanco) {
+            if (l.tipo === "entrada") saldo += l.quantidade;
+            else if (l.tipo === "saida") saldo -= l.quantidade;
+          }
+        }
+
+        novosSaldos[p.id] = saldo;
       } catch (err) {
-        console.error("Erro ao buscar lançamentos do produto", p._id, err);
-        novosSaldos[p._id] = 0;
+        console.error("Erro ao buscar lançamentos do produto", p.id, err);
+        novosSaldos[p.id] = 0;
       }
     }
 
@@ -77,21 +84,25 @@ export default function Estoque() {
         </thead>
         <tbody>
           {produtosFiltrados.map((p) => (
-            <tr key={p._id}>
+            <tr key={p.id}>
               <td>
                 {p.imagem ? (
-                  <img src={p.imagem} alt="Produto" width="50" />
+                  <img
+                    src={p.imagem}
+                    alt="Produto"
+                    style={{ width: "100px", borderRadius: "8px" }}
+                  />
                 ) : (
                   "-"
                 )}
               </td>
               <td>{p.descricao}</td>
               <td>{p.sku}</td>
-              <td>{saldos[p._id] ?? "..."}</td>
+              <td>{saldos[p.id] ?? "..."}</td>
               <td>
                 <button
                   className="btn-gerenciar"
-                  onClick={() => navigate(`/estoque/${p._id}`)}
+                  onClick={() => navigate(`/estoque/${p.id}`)}
                 >
                   gerenciar estoque
                 </button>

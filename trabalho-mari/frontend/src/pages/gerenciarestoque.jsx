@@ -65,13 +65,13 @@ export default function GerenciarEstoque() {
   const salvarLancamento = async () => {
     try {
       console.log("Dados enviados:", form);
-      await axios.post("http://localhost:3000/lancamentos", {
-        produto: id,
-        tipo: form.tipo.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase(),
-        quantidade: Number(form.quantidade),
-        observacao: form.observacao,
-        data: new Date(`${form.data}T${form.hora}`)
-      });
+     await axios.post("http://localhost:3000/lancamentos", {
+  produtoId: id,
+  tipo: form.tipo.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase(),
+  quantidade: Number(form.quantidade),
+  observacao: form.observacao,
+  data: new Date(`${form.data}T${form.hora}`)
+});
 
       alert("✅ Lançamento salvo!");
       setMostrarModal(false);
@@ -116,7 +116,7 @@ export default function GerenciarEstoque() {
         </thead>
         <tbody>
           {lancamentos.map((l) => (
-            <tr key={l._id}>
+            <tr key={l.id}>
               <td>
                 {new Date(l.data).toLocaleDateString()} -{" "}
                 {new Date(l.data).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}

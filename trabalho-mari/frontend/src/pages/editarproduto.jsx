@@ -11,8 +11,7 @@ export default function EditarProduto() {
     sku: "",
     imagem: "",
     descricao_complementar: "",
-    preco: "",
-    saldo: ""
+    preco: ""
   });
 
   useEffect(() => {
@@ -35,18 +34,21 @@ export default function EditarProduto() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      await axios.put(`http://localhost:3000/produtos/${id}`, formData, {
-        headers: { "Content-Type": "application/json" }
-      });
-      alert("✅ Produto atualizado com sucesso!");
-      navigate("/");
-    } catch (error) {
-      console.error("❌ Erro ao atualizar produto:", error);
-      alert("❌ Erro ao atualizar produto. Veja o console.");
-    }
-  };
+  e.preventDefault();
+
+  const { saldo, ...dadosParaSalvar } = formData;
+
+  try {
+    await axios.put(`http://localhost:3000/produtos/${id}`, dadosParaSalvar, {
+      headers: { "Content-Type": "application/json" }
+    });
+    alert("✅ Produto atualizado com sucesso!");
+    navigate("/");
+  } catch (error) {
+    console.error("❌ Erro ao atualizar produto:", error);
+    alert("❌ Erro ao atualizar produto. Veja o console.");
+  }
+};
 
   return (
     <div>
