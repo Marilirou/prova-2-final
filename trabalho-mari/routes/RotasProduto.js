@@ -2,6 +2,13 @@ const express = require("express");
 const router = express.Router();
 const Produto = require("../models/Produto");
 
+const autenticarToken = require("../middlewares/auth");
+
+router.get("/", autenticarToken, async (req, res) => {
+  const produtos = await Produto.findAll();
+  res.json(produtos);
+});
+
 // GET todos os produtos
 router.get("/", async (req, res) => {
   try {
