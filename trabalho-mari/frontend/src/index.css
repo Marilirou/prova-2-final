@@ -122,7 +122,8 @@ table {
   border-collapse: collapse;
 }
 
-table th, table td {
+table th,
+table td {
   padding: 12px;
   text-align: left;
 }
@@ -273,7 +274,8 @@ form button {
   margin-top: 10px;
 }
 
-.pagina-estoque th, .pagina-estoque td {
+.pagina-estoque th,
+.pagina-estoque td {
   padding: 10px;
   text-align: left;
 }
@@ -282,4 +284,18 @@ form button {
   background-color: #f3eafa;
   color: #7e57c2;
   font-weight: bold;
+}
+input.erro-campo,
+textarea.erro-campo {
+  border: 2px solid red;
+}
+
+.erro {
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.erro-campo {
+  border: 2px solid red;
 }

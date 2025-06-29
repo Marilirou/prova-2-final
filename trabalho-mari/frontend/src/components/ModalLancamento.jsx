@@ -1,6 +1,12 @@
-import "../styles/modal.css";
+import '../styles/modal.css';
 
-export default function ModalLancamento({ aberto, fechar, onSalvar, form, setForm }) {
+export default function ModalLancamento({
+  aberto,
+  fechar,
+  onSalvar,
+  form,
+  setForm
+}) {
   if (!aberto) return null;
 
   const handleChange = (e) => {
@@ -18,7 +24,9 @@ export default function ModalLancamento({ aberto, fechar, onSalvar, form, setFor
       <div className="modal">
         <div className="modal-topo">
           <h3>Lançamento de estoque</h3>
-          <span className="fechar" onClick={fechar}>fechar ✖</span>
+          <span className="fechar" onClick={fechar}>
+            fechar ✖
+          </span>
         </div>
 
         <form onSubmit={handleSubmit}>
@@ -33,26 +41,47 @@ export default function ModalLancamento({ aberto, fechar, onSalvar, form, setFor
             </div>
             <div>
               <label>Data</label>
-              <input type="date" name="data" value={form.data} onChange={handleChange} />
+              <input
+                type="date"
+                name="data"
+                value={form.data}
+                onChange={handleChange}
+              />
             </div>
             <div>
               <label>Hora</label>
-              <input type="time" name="hora" value={form.hora} onChange={handleChange} />
+              <input
+                type="time"
+                name="hora"
+                value={form.hora}
+                onChange={handleChange}
+              />
             </div>
           </div>
 
           <div className="form-linha">
             <div style={{ flex: 1 }}>
               <label>Quantidade</label>
-              <input type="number" name="quantidade" value={form.quantidade} onChange={handleChange} />
+              <input
+                type="number"
+                name="quantidade"
+                value={form.quantidade}
+                onChange={handleChange}
+              />
             </div>
           </div>
 
           <label>Observações</label>
-          <textarea name="observacao" value={form.observacao} onChange={handleChange}></textarea>
+          <textarea
+            name="observacao"
+            value={form.observacao}
+            onChange={handleChange}
+          ></textarea>
 
           <div className="botoes-modal">
-            <button type="submit" className="botao-azul">salvar</button>
+            <button type="submit" className="botao-azul">
+              salvar
+            </button>
           </div>
         </form>
       </div>

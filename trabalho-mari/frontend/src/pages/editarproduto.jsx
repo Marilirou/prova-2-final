@@ -1,17 +1,17 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
 
 export default function EditarProduto() {
   const navigate = useNavigate();
   const { id } = useParams();
 
   const [formData, setFormData] = useState({
-    descricao: "",
-    sku: "",
-    imagem: "",
-    descricao_complementar: "",
-    preco: ""
+    descricao: '',
+    sku: '',
+    imagem: '',
+    descricao_complementar: '',
+    preco: ''
   });
 
   useEffect(() => {
@@ -20,8 +20,8 @@ export default function EditarProduto() {
         const res = await axios.get(`http://localhost:3000/produtos/${id}`);
         setFormData(res.data);
       } catch (err) {
-        console.error("Erro ao carregar produto", err);
-        alert("Erro ao carregar produto.");
+        console.error('Erro ao carregar produto', err);
+        alert('Erro ao carregar produto.');
       }
     }
 
@@ -34,26 +34,28 @@ export default function EditarProduto() {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const { saldo, ...dadosParaSalvar } = formData;
+    const { saldo, ...dadosParaSalvar } = formData;
 
-  try {
-    await axios.put(`http://localhost:3000/produtos/${id}`, dadosParaSalvar, {
-      headers: { "Content-Type": "application/json" }
-    });
-    alert("✅ Produto atualizado com sucesso!");
-    navigate("/");
-  } catch (error) {
-    console.error("❌ Erro ao atualizar produto:", error);
-    alert("❌ Erro ao atualizar produto. Veja o console.");
-  }
-};
+    try {
+      await axios.put(`http://localhost:3000/produtos/${id}`, dadosParaSalvar, {
+        headers: { 'Content-Type': 'application/json' }
+      });
+      alert('✅ Produto atualizado com sucesso!');
+      navigate('/');
+    } catch (error) {
+      console.error('❌ Erro ao atualizar produto:', error);
+      alert('❌ Erro ao atualizar produto. Veja o console.');
+    }
+  };
 
   return (
     <div>
-      <button className="btn-voltar" onClick={() => navigate("/")}>🔙 voltar</button>
-      <h2 style={{ marginLeft: "10px" }}>Editar produto</h2>
+      <button className="btn-voltar" onClick={() => navigate('/')}>
+        🔙 voltar
+      </button>
+      <h2 style={{ marginLeft: '10px' }}>Editar produto</h2>
       <p className="subtitulo">dados gerais</p>
 
       <form onSubmit={handleSubmit}>
@@ -104,11 +106,15 @@ export default function EditarProduto() {
         />
 
         {formData.imagem && (
-          <div style={{ marginTop: "10px" }}>
+          <div style={{ marginTop: '10px' }}>
             <img
               src={formData.imagem}
               alt="Pré-visualização"
-              style={{ maxWidth: "150px", borderRadius: "8px", border: "1px solid #ccc" }}
+              style={{
+                maxWidth: '150px',
+                borderRadius: '8px',
+                border: '1px solid #ccc'
+              }}
             />
           </div>
         )}

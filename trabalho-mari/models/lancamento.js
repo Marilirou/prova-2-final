@@ -1,9 +1,9 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../config/db");
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/db');
 
-const Lancamento = sequelize.define("Lancamento", {
+const Lancamento = sequelize.define('Lancamento', {
   tipo: {
-    type: DataTypes.ENUM("entrada", "saida", "balanco"),
+    type: DataTypes.ENUM('entrada', 'saida', 'balanco'),
     allowNull: false
   },
   quantidade: {

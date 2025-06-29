@@ -1,21 +1,21 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 export default function Estoque() {
   const navigate = useNavigate();
   const [produtos, setProdutos] = useState([]);
-  const [busca, setBusca] = useState("");
+  const [busca, setBusca] = useState('');
   const [saldos, setSaldos] = useState({});
 
   useEffect(() => {
     const carregarTudo = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/produtos");
+        const res = await axios.get('http://localhost:3000/produtos');
         setProdutos(res.data);
         buscarSaldos(res.data);
       } catch (err) {
-        console.error("Erro ao carregar produtos:", err);
+        console.error('Erro ao carregar produtos:', err);
       }
     };
 
@@ -27,25 +27,27 @@ export default function Estoque() {
 
     for (const p of produtos) {
       try {
-        const res = await axios.get(`http://localhost:3000/lancamentos/${p.id}`);
+        const res = await axios.get(
+          `http://localhost:3000/lancamentos/${p.id}`
+        );
         const lancs = res.data;
 
         let saldo = 0;
         let encontrouBalanco = false;
 
         for (const l of lancs) {
-          if (l.tipo === "balanco") {
+          if (l.tipo === 'balanco') {
             saldo = l.quantidade;
             encontrouBalanco = true;
           } else if (!encontrouBalanco) {
-            if (l.tipo === "entrada") saldo += l.quantidade;
-            else if (l.tipo === "saida") saldo -= l.quantidade;
+            if (l.tipo === 'entrada') saldo += l.quantidade;
+            else if (l.tipo === 'saida') saldo -= l.quantidade;
           }
         }
 
         novosSaldos[p.id] = saldo;
       } catch (err) {
-        console.error("Erro ao buscar lançamentos do produto", p.id, err);
+        console.error('Erro ao buscar lançamentos do produto', p.id, err);
         novosSaldos[p.id] = 0;
       }
     }
@@ -90,15 +92,15 @@ export default function Estoque() {
                   <img
                     src={p.imagem}
                     alt="Produto"
-                    style={{ width: "100px", borderRadius: "8px" }}
+                    style={{ width: '100px', borderRadius: '8px' }}
                   />
                 ) : (
-                  "-"
+                  '-'
                 )}
               </td>
               <td>{p.descricao}</td>
               <td>{p.sku}</td>
-              <td>{saldos[p.id] ?? "..."}</td>
+              <td>{saldos[p.id] ?? '...'}</td>
               <td>
                 <button
                   className="btn-gerenciar"

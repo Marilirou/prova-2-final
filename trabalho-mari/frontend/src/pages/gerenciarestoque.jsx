@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
-import ModalLancamento from "../components/ModalLancamento";
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
+import ModalLancamento from '../components/ModalLancamento';
 
 export default function GerenciarEstoque() {
   const { id } = useParams();
@@ -13,11 +13,11 @@ export default function GerenciarEstoque() {
 
   const [mostrarModal, setMostrarModal] = useState(false);
   const [form, setForm] = useState({
-    tipo: "Entrada",
+    tipo: 'Entrada',
     data: new Date().toISOString().slice(0, 10),
-    hora: new Date().toLocaleTimeString("pt-BR").slice(0, 5),
-    quantidade: "",
-    observacao: ""
+    hora: new Date().toLocaleTimeString('pt-BR').slice(0, 5),
+    quantidade: '',
+    observacao: ''
   });
 
   useEffect(() => {
@@ -30,7 +30,7 @@ export default function GerenciarEstoque() {
       const res = await axios.get(`http://localhost:3000/produtos/${id}`);
       setProduto(res.data);
     } catch (err) {
-      console.error("Erro ao buscar produto", err);
+      console.error('Erro ao buscar produto', err);
     }
   };
 
@@ -45,12 +45,12 @@ export default function GerenciarEstoque() {
       for (let i = 0; i < dados.length; i++) {
         const l = dados[i];
 
-        if (l.tipo === "balanco") {
+        if (l.tipo === 'balanco') {
           novoSaldo = l.quantidade;
           encontrouBalanco = true;
-        } else if (l.tipo === "entrada") {
+        } else if (l.tipo === 'entrada') {
           novoSaldo += l.quantidade;
-        } else if (l.tipo === "saida") {
+        } else if (l.tipo === 'saida') {
           novoSaldo -= l.quantidade;
         }
       }
@@ -58,33 +58,36 @@ export default function GerenciarEstoque() {
       setLancamentos(dados);
       setSaldo(novoSaldo);
     } catch (err) {
-      console.error("Erro ao buscar lançamentos", err);
+      console.error('Erro ao buscar lançamentos', err);
     }
   };
 
   const salvarLancamento = async () => {
     try {
-      console.log("Dados enviados:", form);
-     await axios.post("http://localhost:3000/lancamentos", {
-  produtoId: id,
-  tipo: form.tipo.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase(),
-  quantidade: Number(form.quantidade),
-  observacao: form.observacao,
-  data: new Date(`${form.data}T${form.hora}`)
-});
+      console.log('Dados enviados:', form);
+      await axios.post('http://localhost:3000/lancamentos', {
+        produtoId: id,
+        tipo: form.tipo
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .toLowerCase(),
+        quantidade: Number(form.quantidade),
+        observacao: form.observacao,
+        data: new Date(`${form.data}T${form.hora}`)
+      });
 
-      alert("✅ Lançamento salvo!");
+      alert('✅ Lançamento salvo!');
       setMostrarModal(false);
       setForm({
-        tipo: "Entrada",
+        tipo: 'Entrada',
         data: new Date().toISOString().slice(0, 10),
-        hora: new Date().toLocaleTimeString("pt-BR").slice(0, 5),
-        quantidade: "",
-        observacao: ""
+        hora: new Date().toLocaleTimeString('pt-BR').slice(0, 5),
+        quantidade: '',
+        observacao: ''
       });
       buscarLancamentos();
     } catch (err) {
-      alert("❌ Erro ao salvar lançamento.");
+      alert('❌ Erro ao salvar lançamento.');
     }
   };
 
@@ -92,13 +95,23 @@ export default function GerenciarEstoque() {
 
   return (
     <div>
-      <button className="btn-voltar" onClick={() => navigate("/estoque")}>🔙 voltar</button>
+      <button className="btn-voltar" onClick={() => navigate('/estoque')}>
+        🔙 voltar
+      </button>
       <h2 style={{ marginBottom: 0 }}>{produto.descricao}</h2>
-      <p style={{ marginTop: 0, fontWeight: "300" }}>{produto.sku}</p>
+      <p style={{ marginTop: 0, fontWeight: '300' }}>{produto.sku}</p>
 
-      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "15px" }}>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          marginBottom: '15px'
+        }}
+      >
         <div>
-          <p style={{ fontWeight: "bold" }}>saldo físico <span>{saldo}</span></p>
+          <p style={{ fontWeight: 'bold' }}>
+            saldo físico <span>{saldo}</span>
+          </p>
         </div>
         <button className="botao-azul" onClick={() => setMostrarModal(true)}>
           incluir lançamento
@@ -118,12 +131,15 @@ export default function GerenciarEstoque() {
           {lancamentos.map((l) => (
             <tr key={l.id}>
               <td>
-                {new Date(l.data).toLocaleDateString()} -{" "}
-                {new Date(l.data).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                {new Date(l.data).toLocaleDateString()} -{' '}
+                {new Date(l.data).toLocaleTimeString([], {
+                  hour: '2-digit',
+                  minute: '2-digit'
+                })}
               </td>
               <td>{l.tipo}</td>
               <td>{l.quantidade}</td>
-              <td>{l.observacao || "–"}</td>
+              <td>{l.observacao || '–'}</td>
             </tr>
           ))}
         </tbody>

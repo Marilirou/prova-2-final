@@ -11,7 +11,7 @@ import Login from './pages/Login';
 import PrivateRoute from './components/PrivateRoute';
 
 function App() {
-  const [aba, setAba] = useState("produtos");
+  const [aba, setAba] = useState('produtos');
 
   return (
     <div className="layout">
@@ -19,12 +19,54 @@ function App() {
       <div className="content">
         <Routes>
           <Route path="/login" element={<Login />} />
-          <Route path="/" element={<PrivateRoute><Produtos /></PrivateRoute>} />
-          <Route path="/estoque" element={<PrivateRoute><Estoque /></PrivateRoute>} />
-          <Route path="/novo-produto" element={<PrivateRoute><NovoProduto /></PrivateRoute>} />
-          <Route path="/produto/:id" element={<PrivateRoute><DetalhesProduto /></PrivateRoute>} />
-          <Route path="/editar-produto/:id" element={<PrivateRoute><EditarProduto /></PrivateRoute>} />
-          <Route path="/estoque/:id" element={<PrivateRoute><GerenciarEstoque /></PrivateRoute>} />
+          <Route
+            path="/"
+            element={
+              <PrivateRoute>
+                <Produtos />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/estoque"
+            element={
+              <PrivateRoute>
+                <Estoque />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/novo-produto"
+            element={
+              <PrivateRoute>
+                <NovoProduto />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/produto/:id"
+            element={
+              <PrivateRoute>
+                <DetalhesProduto />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/editar-produto/:id"
+            element={
+              <PrivateRoute>
+                <EditarProduto />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/estoque/:id"
+            element={
+              <PrivateRoute>
+                <GerenciarEstoque />
+              </PrivateRoute>
+            }
+          />
         </Routes>
       </div>
     </div>
