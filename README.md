@@ -30,6 +30,7 @@ Trata-se de um sistema para cadastro de produtos de decoração com controle de 
 # Pré-requisitos:
 - Node.js
 - MySQL https://dev.mysql.com/downloads/file/?id=541636
+  (crie DATABASE trabalho_mari)
 
 1. Baixe o arquivo trabalho-mari.zip
 2. Abra no VS Code 
